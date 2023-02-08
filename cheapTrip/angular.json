@@ -37,7 +37,11 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/_redirects"
+              {
+                "glob": "_redirects",
+                "input": "src",
+                "output": "/"
+              }
             ],
             "styles": [
               "node_modules/flag-icon-css/css/flag-icon.min.css",
