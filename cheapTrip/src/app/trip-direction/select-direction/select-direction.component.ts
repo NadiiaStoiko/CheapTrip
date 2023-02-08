@@ -17,7 +17,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorInterceptor } from '../../error-interceptor';
 import { HttpClient } from '@angular/common/http';
 import { HttpService } from 'src/app/service/http.service';
-import {GlobalService} from '../../global/global.service'
+import {GlobalService} from '../../global/global.service';
+import { SelectService } from './select.service';
+
 
 
 
@@ -47,8 +49,8 @@ import {GlobalService} from '../../global/global.service'
 
 
 export class SelectDirectionComponent implements OnInit {
-  
-  
+
+
 
 
   @ViewChild('startPointInput', { static: false })
@@ -59,6 +61,11 @@ export class SelectDirectionComponent implements OnInit {
   stateSubscription: Subscription;
   directionForm: FormGroup;
   startPointAutoComplete: IPathPoint[];
+  // matchedPoint:any[];
+  // data:any[];
+  // citiesList:any[];
+  // isItSecondStep:boolean=false;
+  // selectedStartPoint:string
   endPointAutoComplete: IPathPoint[];
   startPoint: IPathPoint;
   endPoint: IPathPoint;
@@ -74,23 +81,24 @@ export class SelectDirectionComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private httpService: HttpService,
+    private selectService: SelectService,
     private errorInterceptor:ErrorInterceptor,
     private store: Store<fromApp.AppState>,
     private route: ActivatedRoute,
     private router: Router
   ) {
 
-  
+
 
 
   }
   ngOnDestroy(): void {}
 
   ngOnInit() {
-    
-   
 
-    
+
+
+
     console.log ("NG ON init start!");
     this.mode = Modes.SEARCH;
     this.startPointAutoComplete = [];
@@ -110,14 +118,14 @@ export class SelectDirectionComponent implements OnInit {
 
     this.pointsSubscription();
     this.router.events.subscribe((res) => console.log('rout'));
-    
+
     console.log ("NG oninit end!");
-  
+
   }
 
- 
 
-  
+
+
   // autocomplete is invoked
   onInput(str: string, type: 'from' | 'to'): void {
     const point: IPoint = { name: str, type: type };
@@ -145,7 +153,10 @@ export class SelectDirectionComponent implements OnInit {
 
   optionSelected(point: any, type: string) {
     if (type == 'from') {
-      this.startSubj.next(point);
+     this.startSubj.next(point);
+    //  this.selectedStartPoint = point;
+    //  this.findCitiesFrom(this.selectedStartPoint);
+
     } else if (type === 'to') {
       this.endSubj.next(point);
     }
@@ -255,7 +266,7 @@ export class SelectDirectionComponent implements OnInit {
   }
 
   private setForm() {
-    
+
     this.directionForm = new FormGroup({
       startPointControl: new FormControl('', [
         this.patternValid({
@@ -264,7 +275,7 @@ export class SelectDirectionComponent implements OnInit {
           For now, we support only English input.`,
         }),
       ]),
-      
+
       endPointControl: new FormControl('', [
         this.patternValid({
           pattern: /[a-zA-Z0-9\-\s]/,
@@ -368,4 +379,112 @@ export class SelectDirectionComponent implements OnInit {
       );
     });
   }
+
+  // // Связано с автокомплитом
+
+  // async onChangeHandlerFrom(text) {
+  //   console.log('change text', text);
+
+  //   ///****active after change input********* */
+  //   // setCityName(text); функция с хука
+  //   // setOptionsFrom(await cityMatcher(text));
+  //   this.cityMatcher(text);
+  //   // console.log('this.matchedPoint',this.matchedPoint);
+
+  // }
+
+  // cityMatcher(text){
+  //   ///****active after change input********* */
+  //   let matches = [];
+  //   if (text.length > 0) {
+
+  //   this.selectService.getAllCitiesForAutoComplete$(text).subscribe((res)=>{
+  //     this.data=res.features
+  //     matches = this.data.map((feature) => feature.properties.name);
+  //     matches = matches.filter((a, b) => matches.indexOf(a) === b);
+  //     matches = this.sortingByString(matches, text);
+  //     this.matchedPoint=matches;
+  //   })
+  //   }
+
+  //   // return matches;
+  // };
+
+  // async findAutocomplete (cityName) {
+  //   ///****active after change input********* */
+  //   const url = `https://photon.komoot.io/api/?q=${cityName}&osm_tag=place:city`;
+  //   const response = await fetch(url);
+  //   let data = (await response.json()).features;
+  //   /* const coordinates = data.map(city=> city.geometry.coordinates);
+  //   console.log(coordinates); */
+  //   console.log(111,data);
+  //   return data;
+  // };
+
+  // sortingByString (array, query) {
+  //   const keyword = query.toLocaleLowerCase();
+  //   const sortedArray = array.sort((first, second) => {
+  //     if (
+  //       first.toLocaleLowerCase().startsWith(keyword) &&
+  //       second.toLocaleLowerCase().startsWith(keyword)
+  //     ) {
+  //       return 0;
+  //     }
+  //     if (first.toLocaleLowerCase().startsWith(keyword)) {
+  //       return -1;
+  //     }
+  //     return 1;
+  //   });
+  //   return sortedArray;
+  // };
+
+  // async findCitiesFrom(cityName) {
+  //   ///********active on step 1******** */
+  //   this.findCities(cityName).then((data) => {
+  //     const sortedData = this.sortCitiesByImportance(data);
+  //     console.log("sortedData", sortedData);
+  //     if (sortedData.length>0) {
+  //       // this.isItSecondStep=true;
+  //       let citiesList = sortedData.map((list)=>this.nameOfCity(list));
+  //       citiesList = citiesList.map(city=>`${city.city}`+`${city.county}`+','+`${city.country}`)
+  //       // this.matchedPoint = citiesList
+  //       console.log('cityList', citiesList);
+
+  //     }
+  //     // setJsonFrom(sortedData);данные из хука сет стейт
+  //   });
+  // };
+
+  // async findCities(cityName) {
+  //   ///********active on step 1******** */
+  //   const url = `https://nominatim.openstreetmap.org/search?city=${cityName}&format=geojson&limit=10`;
+  //   return fetch(url).then((response) => response.json());
+  // };
+
+  // sortCitiesByImportance(data) {
+  //   return data.features.sort(
+  //     (firstData, secondData) =>
+  //       secondData.properties.importance - firstData.properties.importance
+  //   );
+  // };
+
+  // nameOfCity(city){
+  //   const nameOfCityArr = city.properties.display_name.split(",");
+  //   if (nameOfCityArr.length > 2) {
+  //     return {
+  //       city: nameOfCityArr[0],
+  //       country: nameOfCityArr[nameOfCityArr.length - 1],
+  //       county: nameOfCityArr[1],
+  //       geometry: city.geometry.coordinates,
+  //       id: city.properties.osm_id,
+  //     };
+  //   }
+  //   return {
+  //     city: nameOfCityArr[0],
+  //     country: nameOfCityArr[nameOfCityArr.length - 1],
+  //     county: null,
+  //     geometry: city.geometry.coordinates,
+  //     id: city.properties.osm_id,
+  //   };
+  // };
 }

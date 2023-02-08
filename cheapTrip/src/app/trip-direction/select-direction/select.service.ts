@@ -61,4 +61,9 @@ export class SelectService {
       .get<IPathPoint[]>(this.getUrl(name, 'end'))
       .pipe(tap((arr) => {}));
   }
+  // getAllCitiesForAutoComplete$(cityName): Observable<any> {
+  //   const url = `https://photon.komoot.io/api/?q=${cityName}&osm_tag=place:city`
+  //  console.log("answer from getAllCitiesForAutoComplete", this.http.get<any>(url))
+  //   return this.http.get<any>(url);
+  // }
 }

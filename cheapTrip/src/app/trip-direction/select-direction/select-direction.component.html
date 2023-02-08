@@ -14,10 +14,13 @@
           <mat-form-field class="startPoint"
             [class.valid]="directionForm.get('startPointControl').valid && directionForm.get('startPointControl').touched"
             [class.invalid]="directionForm.get('startPointControl').invalid && directionForm.get('startPointControl').touched">
-            <!--   <input (focusout)="onFocusOut($event)" (input)="onInput($event.target.value, 'from')" type="text" -->
+            <!-- <input (input)="onChangeHandlerFrom($event.target.value)" (focusout)="onFocusOut($event)"  type="text" -->
             <input (focusout)="onFocusOut($event)" (input)="onInput($event.target.value, 'from')" type="text"
               placeholder="From" i18n-placeholder aria-label="Number" matInput formControlName="startPointControl"
               [matAutocomplete]="auto1" #startPointInput>
+              <!-- <input (change)="onChangeHandlerFrom($event.target.value)" (focusout)="onFocusOut($event)" (input)="onInput($event.target.value, 'from')" type="text"
+              placeholder="From" i18n-placeholder aria-label="Number" matInput formControlName="startPointControl"
+              [matAutocomplete]="auto1" #startPointInput> -->
 
             <mat-autocomplete class="single-autocomplete" #auto1="matAutocomplete"
               (optionSelected)='optionSelected($event.option.value, "from")'>
@@ -25,6 +28,10 @@
               <mat-option *ngFor="let start of startPointAutoComplete" [value]="start.name" >
                 {{start.name}}<span *ngIf="start.country !== undefined">,{{start.country}}</span>
               </mat-option>
+              <!-- <mat-option *ngFor="let startCity of matchedPoint" [value]="startCity" >
+                {{startCity}}
+                <span>{{startCity.county}}</span><span>{{startCity.country}}</span>
+              </mat-option> -->
             </mat-autocomplete>
           </mat-form-field>
           <span class="material-icons" (click)="onCleanInput('start')">
@@ -85,4 +92,3 @@
 
   </form>
 </div>
-

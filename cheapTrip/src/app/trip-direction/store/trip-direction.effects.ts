@@ -103,7 +103,7 @@ PATHMAPDETAILED.set('Taxi', Icons.TAXI);
 
 @Injectable()
 export class TripDirectionEffects {
-  
+
   private language: string;
   private checkPoints: number[];
   private checkPointsStrings: string[];
@@ -128,10 +128,10 @@ export class TripDirectionEffects {
     // this.LocationsRU = httpService.getAllRuLocationsTomcat();
     // console.log (this.LocationsRU);
     // console.log ("en loc "+this.LocationsEN);
-   
+
    //console.log ("init country "+this.country)
-    
-   
+
+
     //"wake up" servlet
       // this.http.get(environment.urlTomCat+'CheapTrip/getRoute?from='+10+'&to='+20).subscribe(data => {
       //   console.log("received routes");
@@ -139,7 +139,7 @@ export class TripDirectionEffects {
       // })
 
     }
-      
+
 
   /*  @Effect()
   newEffect = this.actions$.pipe(
@@ -160,82 +160,82 @@ export class TripDirectionEffects {
     ofType(TripDirectionActions.GET_AUTOCOMPLETE),
     withLatestFrom(this.store$.select('directions')),
     switchMap((request: Array<any>) => {
-      let url = '';
+      let url = '/assets/locations.json';
 
-  
-//this is url for spring server
-      if (request[1].currentServer === 'server68') {
-        url =
-          environment.url68 +
-          'locations?type=' +
-          'from' +
-          // request[0].payload.type +
-          '&search_name=' +
-          encodeURIComponent(request[0].payload.name);
-      } else {
+// //this is url for spring server
+//       if (request[1].currentServer === 'server68') {
+//         url =
+//           environment.url68 +
+//           'locations?type=' +
+//           'from' +
+//           // request[0].payload.type +
+//           '&search_name=' +
+//           encodeURIComponent(request[0].payload.name);
+//       } else {
 
-        url =
-          environment.url104 +
-          'locations?type=' +
-          'from' +
-          // request[0].payload.type +
-          '&search_name=' +
-          encodeURIComponent(request[0].payload.name);
-      }
-        //here is url for a Tomcat server
-       // url = this.selectService.getUrl('from',request[0].payload.name);
-      
-      // if (!this.checkLanguageValidity(request[0].payload.name[0])) {
-      //   return;
-      // }
-      this.language= this.getLanguage(request[0].payload.name[0]);
-      //actual query
-       if (environment.mainServer=="tomcat"){
-        url=  environment.urlTomCat +
-        'CheapTrip/getLocations?type=' +
-        '0' +
-        '&search_name=' +
-       encodeURIComponent(request[0].payload.name);
-        '';
-        if (this.language=='ru'){
-          url+='&language_name=ru';
-        }
-      }
-      
-      let locations = this.LocationsEN;
-      if (this.getLanguage(request[0].payload.name[0])=="ru"){
-        locations = this.LocationsRU;
-      }
-        //local locations array
-      // return locations.pipe(
-      //   map((res) => {
-      //     console.log(res.body);
+//         url =
+//           environment.url104 +
+//           'locations?type=' +
+//           'from' +
+//           // request[0].payload.type +
+//           '&search_name=' +
+//           encodeURIComponent(request[0].payload.name);
+//       }
+//         //here is url for a Tomcat server
+//        // url = this.selectService.getUrl('from',request[0].payload.name);
 
-      //     let resArray:IPathPoint[]= res.body;
-      //     // let result = resArray.filter(s => s.includes(request[0].payload.name));
-      //     let result = resArray.filter((element) => {
-      //       return element.name.includes(request[0].payload.name);
-      //     });
-      //     const newAction =
-      //       request[0].payload.type === 'from'
-      //         // ? new TripDirectionActions.SetStartPointAutocomplete(res.body)
-      //         // : new TripDirectionActions.SetEndPointAutocomplete(res.body);
-      //            ? new TripDirectionActions.SetStartPointAutocomplete(result)
-      //         : new TripDirectionActions.SetEndPointAutocomplete(result);
-      //     return newAction;
-      //   })
+//       // if (!this.checkLanguageValidity(request[0].payload.name[0])) {
+//       //   return;
+//       // }
+//       this.language= this.getLanguage(request[0].payload.name[0]);
+//       //actual query
+//        if (environment.mainServer=="tomcat"){
+//         url=  environment.urlTomCat +
+//         'CheapTrip/getLocations?type=' +
+//         '0' +
+//         '&search_name=' +
+//        encodeURIComponent(request[0].payload.name);
+//         '';
+//         if (this.language=='ru'){
+//           url+='&language_name=ru';
+//         }
+//       }
+
+//       let locations = this.LocationsEN;
+//       if (this.getLanguage(request[0].payload.name[0])=="ru"){
+//         locations = this.LocationsRU;
+//       }
+//         //local locations array
+//       // return locations.pipe(
+//       //   map((res) => {
+//       //     console.log(res.body);
+
+//       //     let resArray:IPathPoint[]= res.body;
+//       //     // let result = resArray.filter(s => s.includes(request[0].payload.name));
+//       //     let result = resArray.filter((element) => {
+//       //       return element.name.includes(request[0].payload.name);
+//       //     });
+//       //     const newAction =
+//       //       request[0].payload.type === 'from'
+//       //         // ? new TripDirectionActions.SetStartPointAutocomplete(res.body)
+//       //         // : new TripDirectionActions.SetEndPointAutocomplete(res.body);
+//       //            ? new TripDirectionActions.SetStartPointAutocomplete(result)
+//       //         : new TripDirectionActions.SetEndPointAutocomplete(result);
+//       //     return newAction;
+//       //   })
 
       //actual http
-      
+
       return this.http
         .get<any>(url, { observe: 'response' })
         .pipe(
           map((res) => {
             console.log(res);
+            let resBody = this.utilForCitiesArray(res.body,request[0].payload.name);
             const newAction =
               request[0].payload.type === 'from'
-                ? new TripDirectionActions.SetStartPointAutocomplete(res.body)
-                : new TripDirectionActions.SetEndPointAutocomplete(res.body);
+                ? new TripDirectionActions.SetStartPointAutocomplete(resBody)
+                : new TripDirectionActions.SetEndPointAutocomplete(resBody);
             return newAction;
           })
           /*  catchError((error) => {
@@ -247,6 +247,131 @@ export class TripDirectionEffects {
         );
     })
   );
+
+  utilForCitiesArray(obj:any, filterValue:string):IPathPoint[] {
+    let arr:Array<any>=Object.values(obj);
+    let arrRedused:Array<any>= arr.reduce((acc, val) => {
+      acc.push({ id: val.id, name: val.name });
+      return acc;
+    }, [])
+    if(filterValue.length>0){
+    arrRedused=arrRedused.filter(option => option.name.toLowerCase().includes(filterValue.toLocaleLowerCase()))
+    this.sortingByString(arrRedused, filterValue)
+    }
+    return arrRedused;
+  }
+
+  sortingByString (array:IPathPoint[], query:string) {
+    const keyword = query.toLocaleLowerCase();
+    const sortedArray = array.sort((first, second) => {
+      if (
+        first.name.toLocaleLowerCase().startsWith(keyword) &&
+        second.name.toLocaleLowerCase().startsWith(keyword)
+      ) {
+        return 0;
+      }
+      if (first.name.toLocaleLowerCase().startsWith(keyword)) {
+        return -1;
+      }
+      return 1;
+    });
+    return sortedArray;
+  };
+
+//   @Effect()
+//   getAutocomplete$ = this.actions$.pipe(
+//     ofType(TripDirectionActions.GET_AUTOCOMPLETE),
+//     withLatestFrom(this.store$.select('directions')),
+//     switchMap((request: Array<any>) => {
+//       let url = '';
+
+
+// //this is url for spring server
+//       if (request[1].currentServer === 'server68') {
+//         url =
+//           environment.url68 +
+//           'locations?type=' +
+//           'from' +
+//           // request[0].payload.type +
+//           '&search_name=' +
+//           encodeURIComponent(request[0].payload.name);
+//       } else {
+
+//         url =
+//           environment.url104 +
+//           'locations?type=' +
+//           'from' +
+//           // request[0].payload.type +
+//           '&search_name=' +
+//           encodeURIComponent(request[0].payload.name);
+//       }
+//         //here is url for a Tomcat server
+//        // url = this.selectService.getUrl('from',request[0].payload.name);
+
+//       // if (!this.checkLanguageValidity(request[0].payload.name[0])) {
+//       //   return;
+//       // }
+//       this.language= this.getLanguage(request[0].payload.name[0]);
+//       //actual query
+//        if (environment.mainServer=="tomcat"){
+//         url=  environment.urlTomCat +
+//         'CheapTrip/getLocations?type=' +
+//         '0' +
+//         '&search_name=' +
+//        encodeURIComponent(request[0].payload.name);
+//         '';
+//         if (this.language=='ru'){
+//           url+='&language_name=ru';
+//         }
+//       }
+
+//       let locations = this.LocationsEN;
+//       if (this.getLanguage(request[0].payload.name[0])=="ru"){
+//         locations = this.LocationsRU;
+//       }
+//         //local locations array
+//       // return locations.pipe(
+//       //   map((res) => {
+//       //     console.log(res.body);
+
+//       //     let resArray:IPathPoint[]= res.body;
+//       //     // let result = resArray.filter(s => s.includes(request[0].payload.name));
+//       //     let result = resArray.filter((element) => {
+//       //       return element.name.includes(request[0].payload.name);
+//       //     });
+//       //     const newAction =
+//       //       request[0].payload.type === 'from'
+//       //         // ? new TripDirectionActions.SetStartPointAutocomplete(res.body)
+//       //         // : new TripDirectionActions.SetEndPointAutocomplete(res.body);
+//       //            ? new TripDirectionActions.SetStartPointAutocomplete(result)
+//       //         : new TripDirectionActions.SetEndPointAutocomplete(result);
+//       //     return newAction;
+//       //   })
+
+//       //actual http
+
+//       return this.http
+//         .get<any>(url, { observe: 'response' })
+//         .pipe(
+//           map((res) => {
+//             console.log("resgetAutocompleteEff",res);
+//             const newAction =
+//               request[0].payload.type === 'from'
+//                 ? new TripDirectionActions.SetStartPointAutocomplete(res.body)
+//                 : new TripDirectionActions.SetEndPointAutocomplete(res.body);
+//                 console.log('newAction', newAction);
+//             return newAction;
+//           })
+//           /*  catchError((error) => {
+//           console.log('error', error);
+//           this.handleError(error);
+
+//           return of(new TripDirectionActions.AutoCompleteFail(error));
+//         }) */
+//         );
+//     })
+//   );
+
 
   @Effect()
   getRouts$ = this.actions$.pipe(
@@ -295,14 +420,14 @@ export class TripDirectionEffects {
            // next is for timing... obsolete
           // this.checkPoints.push(Date.now());
           // this.checkPointsStrings.push("received request");
-          
+
           console.log(res);
           let resultPathArr = null;
 
           resultPathArr = this.transformObject(res.body as IRecievedRouts[]);
-          
+
           resultPathArr.sort((a, b) => (a.details.euro_price > b.details.euro_price) ? 1 : -1);
-          
+
           const endPoints = {
             from: request[1].startPoint,
             to: request[1].endPoint,
@@ -329,9 +454,9 @@ export class TripDirectionEffects {
           // for (let index = 1; index < this.checkPoints.length; index++) {
           //   console.log (this.checkPointsStrings[index-1]+" -> "+this.checkPointsStrings[index]
           //   +" elapsed "+(this.checkPoints[index]-this.checkPoints[index-1])+" ms");
-            
+
           // }
-          
+
           return new TripDirectionActions.SetRouts({
             paths: resultPathArr,
             endPoints: endPoints,
@@ -462,13 +587,13 @@ export class TripDirectionEffects {
      this.checkPoints.push(Date.now());
      this.checkPointsStrings.push("Before filter");
       let stringifyArr;
-      
+
       let duplicateIndex;
       do{
         stringifyArr = paths.map((p) => JSON.stringify(p.details));
-        duplicateIndex=-1;//means no duplicate 
+        duplicateIndex=-1;//means no duplicate
           for (let j = 0; j < paths.length; j++) {
-                  
+
             for (let i = 0; i < paths.length; i++) {
               if ((stringifyArr[j] == stringifyArr[i])&&(i!=j)) {
                 duplicateIndex = i;
@@ -508,5 +633,5 @@ export class TripDirectionEffects {
     }
     return 'undefined';
   }
-  
+
 }
