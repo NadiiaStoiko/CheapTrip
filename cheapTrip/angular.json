@@ -4,12 +4,12 @@
   "newProjectRoot": "projects",
   "projects": {
     "cheapTrip": {
-      "i18n": { 
-        "sourceLocale": "en-US", 
-        "locales": { 
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
           "ru": "src/i18n/messages.ru.xlf",
           "ua": "src/i18n/messages.ua.xlf"
-        } 
+        }
       },
       "projectType": "application",
       "schematics": {
@@ -29,7 +29,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "localize": true,   
+            "localize": true,
             "aot": true,
             "assets": [
               "src/favicon.ico",
@@ -43,14 +43,14 @@
             "scripts": []
           },
           "configurations": {
-           
-            "ru": { 
-              "localize": ["ru"] 
+
+            "ru": {
+              "localize": ["ru"]
             },
-            "ua": { 
-              "localize": ["ua"] 
+            "ua": {
+              "localize": ["ua"]
             },
-            
+
             "production": {
               "fileReplacements": [
                 {
@@ -113,7 +113,8 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/_redirects"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
@@ -150,8 +151,8 @@
         "deploy": {
           "builder": "@jefiozie/ngx-aws-deploy:deploy"
         }
-      
-      
+
+
       }
     }
   },
