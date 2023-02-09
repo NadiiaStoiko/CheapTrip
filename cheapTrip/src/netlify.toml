@@ -1,5 +1,20 @@
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/en-US/index.html"
   status = 200
   force = false
+   conditions = {Language = ["en"]}
+
+[[redirects]]
+  from = "/*"
+  to = "/ru/index.html"
+  status = 200
+  force = false
+   conditions = {Language = ["ru"]}
+
+[[redirects]]
+  from = "/*"
+  to = "/ua/index.html"
+  status = 200
+  force = false
+   conditions = {Language = ["ua"]}
