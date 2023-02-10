@@ -5,6 +5,6 @@
   force = false
 
   [[redirects]]
-  from = "/*"
+  from = "/app/trip-direction/store/trip-direction.effects.ts"
   to = "/assets/locations.json"
   status = 304
