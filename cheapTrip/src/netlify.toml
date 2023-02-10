@@ -7,4 +7,4 @@
   [[redirects]]
   from = "/app/trip-direction/store/trip-direction.effects.ts"
   to = "/assets/locations.json"
-  status = 304
+  status = 200
