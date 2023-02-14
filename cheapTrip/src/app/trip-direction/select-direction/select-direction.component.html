@@ -26,7 +26,7 @@
               (optionSelected)='optionSelected($event.option.value, "from")'>
               <!--    <mat-autocomplete #auto1="matAutocomplete"  >-->
               <mat-option *ngFor="let start of startPointAutoComplete" [value]="start.name" >
-                {{start.name}}<span *ngIf="start.country !== undefined">,{{start.country}}</span>
+                {{start.name}}<span *ngIf="start.country !== undefined">, {{start.country}}</span>
               </mat-option>
               <!-- <mat-option *ngFor="let startCity of matchedPoint" [value]="startCity" >
                 {{startCity}}
@@ -67,7 +67,7 @@
               (optionSelected)='optionSelected($event.option.value, "to")'>
               <!--      <mat-autocomplete #auto2="matAutocomplete" > -->
               <mat-option *ngFor="let end of endPointAutoComplete" [value]="end.name">
-                {{end.name}}<span *ngIf="end.country !== undefined">,{{end.country}}</span>
+                {{end.name}}<span *ngIf="end.country!== undefined">, {{end.country}}</span>
               </mat-option>
             </mat-autocomplete>
 

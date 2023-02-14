@@ -62,7 +62,7 @@ enum Icons {
   directions_boat
   </span>`,
   RIDESHARE =  `<img src="assets/Icons/rideshare_h24_30.svg" width="18">`,
-  
+
   // RIDESHARE = `<span class="material-icons">
   // directions_car
   // </span>`
@@ -159,8 +159,10 @@ export class TripDirectionEffects {
   getAutocomplete$ = this.actions$.pipe(
     ofType(TripDirectionActions.GET_AUTOCOMPLETE),
     withLatestFrom(this.store$.select('directions')),
-    switchMap((request: Array<any>) => {
-      let url = '/assets/locations.json';
+    // switchMap((request: Array<any>) => {
+      map((request: Array<any>) => {
+      // let url = '/assets/locations.json';
+      let data  = require('../../../assets/locations.json');
 
 // //this is url for spring server
 //       if (request[1].currentServer === 'server68') {
@@ -226,32 +228,46 @@ export class TripDirectionEffects {
 
       //actual http
 
-      return this.http
-        .get<any>(url, { observe: 'response' })
-        .pipe(
-          map((res) => {
-            console.log(res);
-            let resBody = this.utilForCitiesArray(res.body,request[0].payload.name);
-            const newAction =
-              request[0].payload.type === 'from'
-                ? new TripDirectionActions.SetStartPointAutocomplete(resBody)
-                : new TripDirectionActions.SetEndPointAutocomplete(resBody);
-            return newAction;
-          })
+      // return this.http
+      // .get<any>(url, { observe: 'response' })
+      // .pipe(
+      //   map((res) => {
+      //     console.log(res,(res));
+          let resBody = this.utilForCitiesArray(data,request[0].payload.name);
+          const newAction =
+            request[0].payload.type === 'from'
+              ? new TripDirectionActions.SetStartPointAutocomplete(resBody)
+              : new TripDirectionActions.SetEndPointAutocomplete(resBody);
+          return newAction;
+        })
+
+      // return this.http
+      //   .get<any>(url, { observe: 'response' })
+      //   .pipe(
+      //     map((res) => {
+      //       console.log(res,(res));
+      //       let resBody = this.utilForCitiesArray(res.body,request[0].payload.name);
+      //       const newAction =
+      //         request[0].payload.type === 'from'
+      //           ? new TripDirectionActions.SetStartPointAutocomplete(resBody)
+      //           : new TripDirectionActions.SetEndPointAutocomplete(resBody);
+      //       return newAction;
+      //     })
+
           /*  catchError((error) => {
           console.log('error', error);
           this.handleError(error);
 
           return of(new TripDirectionActions.AutoCompleteFail(error));
         }) */
-        );
-    })
+        // );
+    // })
   );
 
   utilForCitiesArray(obj:any, filterValue:string):IPathPoint[] {
     let arr:Array<any>=Object.values(obj);
     let arrRedused:Array<any>= arr.reduce((acc, val) => {
-      acc.push({ id: val.id, name: val.name });
+      acc.push({ id: val.id, name: val.name, country :val.country_name});
       return acc;
     }, [])
     if(filterValue.length>0){

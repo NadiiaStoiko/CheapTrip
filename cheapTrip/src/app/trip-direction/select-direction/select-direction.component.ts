@@ -47,7 +47,6 @@ import { SelectService } from './select.service';
 })
 
 
-
 export class SelectDirectionComponent implements OnInit {
 
 
@@ -105,8 +104,8 @@ export class SelectDirectionComponent implements OnInit {
     this.endPointAutoComplete = [];
 
     this.setForm();
-    this.startPoint = { id: 0, name: '' };
-    this.endPoint = { id: 0, name: '' };
+    this.startPoint = { id: 0, name: '', country: '' };
+    this.endPoint = { id: 0, name: '',  country: ''  };
     this.defineRouterParams();
     this.stateSubscription = this.store
       .select('directions')
@@ -134,14 +133,14 @@ export class SelectDirectionComponent implements OnInit {
       this.directionForm.get('startPointControl').valid &&
       str.length > 0
     ) {
-      this.startPoint = { id: 0, name: '' };
+      this.startPoint = { id: 0, name: '', country: ''};
       this.store.dispatch(new TripDirectionActions.GetAutocomplete(point));
     } else if (
       type === 'to' &&
       this.directionForm.get('endPointControl').valid &&
       str.length > 0
     ) {
-      this.endPoint = { id: 0, name: '' };
+      this.endPoint = { id: 0, name: '', country: '' };
       this.store.dispatch(new TripDirectionActions.GetAutocomplete(point));
     }
   }
@@ -152,11 +151,10 @@ export class SelectDirectionComponent implements OnInit {
   }
 
   optionSelected(point: any, type: string) {
+    console.log('point', point)
     if (type == 'from') {
      this.startSubj.next(point);
-    //  this.selectedStartPoint = point;
-    //  this.findCitiesFrom(this.selectedStartPoint);
-
+     console.log('select');
     } else if (type === 'to') {
       this.endSubj.next(point);
     }
@@ -164,8 +162,8 @@ export class SelectDirectionComponent implements OnInit {
 
   cleanForm(): void {
     this.directionForm.reset();
-    this.startPoint = { id: 0, name: '' };
-    this.endPoint = { id: 0, name: '' };
+    this.startPoint = { id: 0, name: '', country: '' };
+    this.endPoint = { id: 0, name: '', country: '' };
     this.startPointAutoComplete = [];
     this.endPointAutoComplete = [];
     this.directionForm.markAsUntouched();
@@ -176,7 +174,7 @@ export class SelectDirectionComponent implements OnInit {
 
   onCleanInput(point: 'end' | 'start') {
     if (point === 'start') {
-      this.startPoint = { id: 0, name: '' };
+      this.startPoint = { id: 0, name: '',country: '' };
       this.startPointAutoComplete = [];
       this.directionForm.patchValue({
         startPointControl: '',
@@ -190,7 +188,7 @@ export class SelectDirectionComponent implements OnInit {
       );
       this.startPointInputEl.nativeElement.focus();
     } else {
-      this.endPoint = { id: 0, name: '' };
+      this.endPoint = { id: 0, name: '', country: '' };
       this.endPointAutoComplete = [];
       this.directionForm.patchValue({
         endPointControl: '',
@@ -321,6 +319,7 @@ export class SelectDirectionComponent implements OnInit {
           this.startPoint = {
             id: queryParams.fromID,
             name: queryParams.from,
+            country: ''
           };
           this.store.dispatch(
             new TripDirectionActions.SetStartPoint({ ...this.startPoint })
@@ -328,6 +327,7 @@ export class SelectDirectionComponent implements OnInit {
           this.endPoint = {
             id: queryParams.toID,
             name: queryParams.to,
+            country: ''
           };
           this.store.dispatch(
             new TripDirectionActions.SetEndPoint({ ...this.endPoint })

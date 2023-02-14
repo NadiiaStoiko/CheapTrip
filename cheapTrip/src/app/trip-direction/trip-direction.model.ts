@@ -55,4 +55,5 @@ export interface IPath {
 export interface IPathPoint {
   id: number;
   name: string;
+  country: string;
 }

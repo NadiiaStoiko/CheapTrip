@@ -17,8 +17,8 @@ export interface ITripDirectionState {
 }
 
 const initialState: ITripDirectionState = {
-  startPoint: { id: 0, name: '' },
-  endPoint: { id: 0, name: '' },
+  startPoint: { id: 0, name: '', country:'' },
+  endPoint: { id: 0, name: '', country:''},
   startPointAutoComplete: [],
   endPointAutoComplete: [],
   paths: [],
@@ -127,7 +127,7 @@ export function tripDirectionReducer(
       };
 
     case TripDirectionActions.CLEAN_DATA:
-      const empty = { id: 0, name: '' };
+      const empty = { id: 0, name: '', country:''  };
       return {
         ...state,
         startPoint: empty,
@@ -148,8 +148,8 @@ export function tripDirectionReducer(
     case TripDirectionActions.GO_HOME:
       return {
         ...state,
-        startPoint: { id: 0, name: '' },
-        endPoint: { id: 0, name: '' },
+        startPoint: { id: 0, name: '', country: '' },
+        endPoint: { id: 0, name: '', country:  ''},
         startPointAutoComplete: [],
         endPointAutoComplete: [],
         paths: [],
